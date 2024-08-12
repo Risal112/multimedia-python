@@ -1,37 +1,32 @@
 from pydub import AudioSegment
+
+# Memuat file audio
+audio = AudioSegment.from_file("mss.mp3")
+print("✅ Audio berhasil dimuat")
+
+# Pemotongan audio
+start_time = 30 * 1000  # 30 detik
+end_time = 60 * 1000    # 60 detik
+clipped_audio = audio[start_time:end_time]
+clipped_audio.export("clipped_result.mp3", format="mp3")
+print("✅ Pemotongan berhasil")
+
+# Penggabungan audio
+audio2 = AudioSegment.from_file("mss.mp3")
+combined_audio = clipped_audio + audio2
+combined_audio.export("combined_result.mp3", format="mp3")
+print("✅ Penggabungan berhasil")
+
+# Konversi format
+audio.export("result.wav", format="wav")
+print("✅ Konversi format berhasil")
+
+# Pengaturan volume
+louder_audio = audio + 10  # Menambah volume 10dB
+louder_audio.export("louder_result.mp3", format="mp3")
+print("✅ Pengaturan volume berhasil")
+
+# Memutar audio hasil manipulasi
 from pydub.playback import play
-
-def manipulate_audio(input_path, output_path):
-    try:
-        audio = AudioSegment.from_file(input_path)
-        print("✅ Audio berhasil dimuat")
-
-        if len(audio) > 10000:
-            clipped_audio = audio[:10000]
-            clipped_audio.export('clipped_' + output_path, format='mp3')
-            print("✅ Pemotongan berhasil")
-        else:
-            raise ValueError("Durasi audio terlalu pendek untuk dipotong 10 detik")
-
-        combined_audio = audio + clipped_audio
-        combined_audio.export('combined_' + output_path, format='mp3')
-        print("✅ Penggabungan berhasil")
-
-        audio.export('result.wav', format='wav')
-        print("✅ Konversi format berhasil")
-
-        if audio.dBFS < -10:
-            louder_audio = audio + 10
-            louder_audio.export('louder_' + output_path, format='mp3')
-            print("✅ Pengaturan volume berhasil")
-        else:
-            raise ValueError("Volume audio sudah terlalu tinggi")
-
-        print("🔊 Memutar audio hasil manipulasi...")
-        play(louder_audio)
-
-    except Exception as e:
-        print(f"❌ Terjadi kesalahan: {e}")
-
-if __name__ == "__main__":
-    manipulate_audio('example.mp3', 'result.mp3')
+play(louder_audio)
+print("🔊 Memutar audio hasil manipulasi...")

@@ -6,15 +6,16 @@ def manipulate_image(input_path, output_path):
         image = Image.open(input_path)
         print("✅ Gambar berhasil dimuat")
 
-        # Operasi Cropping dengan validasi ukuran
-        if image.width > 200 and image.height > 200:
-            cropped_image = image.crop((10, 10, 200, 200))
-            print("✅ Cropping berhasil")
-        else:
-            raise ValueError("Gambar terlalu kecil untuk di-crop ke ukuran 200x200")
+        # Tentukan ukuran cropping
+        crop_width = min(image.width, 200)
+        crop_height = min(image.height, 200)
 
-        # Operasi Resizing dengan rasio aspek yang dipertahankan
-        resized_image = cropped_image.resize((100, 100), Image.ANTIALIAS)
+        # Lakukan cropping
+        cropped_image = image.crop((10, 10, crop_width, crop_height))
+        print(f"✅ Cropping berhasil dengan ukuran: {crop_width}x{crop_height}")
+
+        # Operasi Resizing
+        resized_image = cropped_image.resize((100, 100), Image.Resampling.LANCZOS)
         print("✅ Resizing berhasil")
 
         # Operasi Filtering
@@ -36,7 +37,7 @@ def manipulate_image(input_path, output_path):
         filtered_image.save('filtered_' + output_path)
         bright_image.save('bright_' + output_path)
         combined_image.save('combined_' + output_path)
-        print("✅ Semua gambar berhasil disimpan")
+        
 
     except Exception as e:
         print(f"❌ Terjadi kesalahan: {e}")
