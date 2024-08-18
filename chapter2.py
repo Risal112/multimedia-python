@@ -15,8 +15,7 @@ filtered_image = resized_image.filter(ImageFilter.BLUR)
 # Save the filtered image
 filtered_image.save('filtered_gunungg.jpeg')
 
-
-from pydub import AudioSegment
+from pydub import AudioSegment;
 
 # Load the audio file
 audio = AudioSegment.from_file('mss.mp3')
